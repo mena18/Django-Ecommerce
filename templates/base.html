@@ -1,5 +1,6 @@
 {% load static %}
-
+{% load error_tags %}
+{% load user_tags %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,7 +8,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <title>Material Design Bootstrap</title>
+  <title>{% block title %}  {% endblock %}</title>
+
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
   <!-- Bootstrap core CSS -->
@@ -54,7 +56,7 @@
     <div class="container">
 
       <!-- Brand -->
-      <a class="navbar-brand waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">
+      <a class="navbar-brand waves-effect" href="{% url 'core:home'%}">
         <strong class="blue-text">MDB</strong>
       </a>
 
@@ -69,49 +71,39 @@
 
         <!-- Left -->
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link waves-effect" href="#">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
           <li class="nav-item">
-            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/" target="_blank">About MDB</a>
+            <a class="nav-link waves-effect" href="{% url 'core:checkout' %}">Check out</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="https://mdbootstrap.com/docs/jquery/getting-started/download/"
-              target="_blank">Free download</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link waves-effect" href="https://mdbootstrap.com/education/bootstrap/" target="_blank">Free
-              tutorials</a>
-          </li>
+
         </ul>
 
         <!-- Right -->
         <ul class="navbar-nav nav-flex-icons">
+          {% if user.is_authenticated %}
           <li class="nav-item">
-            <a class="nav-link waves-effect">
-              <span class="badge red z-depth-1 mr-1"> 1 </span>
+            <a class="nav-link waves-effect" href="{% url 'core:order' %}">
+              <span class="badge red z-depth-1 mr-1"> {{ user|cart_count }} </span>
               <i class="fas fa-shopping-cart"></i>
               <span class="clearfix d-none d-sm-inline-block"> Cart </span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="https://www.facebook.com/mdbootstrap" class="nav-link waves-effect" target="_blank">
-              <i class="fab fa-facebook-f"></i>
+            <a class="nav-link waves-effect">
+              <span> {{user}} </span>
+            </a>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="{% url 'account_signup' %}">
+              <span> SignUp </span>
             </a>
           </li>
           <li class="nav-item">
-            <a href="https://twitter.com/MDBootstrap" class="nav-link waves-effect" target="_blank">
-              <i class="fab fa-twitter"></i>
+            <a class="nav-link waves-effect" href="{% url 'account_login' %}">
+              <span> Login </span>
             </a>
           </li>
-          <li class="nav-item">
-            <a href="https://github.com/mdbootstrap/bootstrap-material-design" class="nav-link border border-light rounded waves-effect"
-              target="_blank">
-              <i class="fab fa-github mr-2"></i>MDB GitHub
-            </a>
-          </li>
+          {% endif %}
         </ul>
 
       </div>
@@ -119,8 +111,26 @@
     </div>
   </nav>
   <!-- Navbar -->
+
+  {% block content_home  %}
+  {% endblock content_home %}
+
+
+<main class="mt-5 pt-4">
+  <div class="container dark-grey-text mt-5">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="row wow fadeIn">
+
+          <div class="col-12 alert alert-{{message.tags | err_tag}}">{{message}}</div>
+        </div>
+      {% endfor %}
+    {% endif %}
+
     {% block content  %}
     {% endblock content %}
+  </div>
+</main>
     <!--Footer-->
     <footer class="page-footer text-center font-small mt-4 wow fadeIn">
 

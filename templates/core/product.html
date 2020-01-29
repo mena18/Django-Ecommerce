@@ -1,16 +1,18 @@
 {% extends 'base.html' %}
+
 {% block content %}
   <!--Main layout-->
-  <main class="mt-5 pt-4">
-    <div class="container dark-grey-text mt-5">
 
       <!--Grid row-->
+
+
+
       <div class="row wow fadeIn">
 
         <!--Grid column-->
         <div class="col-md-6 mb-4">
 
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt="">
+          <img src="{{item.image.url}}" class="img-fluid" alt="">
 
         </div>
         <!--Grid column-->
@@ -23,7 +25,7 @@
 
             <div class="mb-3">
               <a href="">
-                <span class="badge purple mr-1">Category 2</span>
+                <span class="badge purple mr-1">{{item.get_category_display}}</span>
               </a>
               <a href="">
                 <span class="badge blue mr-1">New</span>
@@ -34,26 +36,32 @@
             </div>
 
             <p class="lead">
+              {%  if item.discount_price %}
               <span class="mr-1">
-                <del>$200</del>
+                <del>${{item.price}}</del>
               </span>
-              <span>$100</span>
+              <span>${{item.discount_price}}</span>
+              {% else %}
+              <strong>${{item.price}}</strong>
+              {% endif %}
             </p>
 
             <p class="lead font-weight-bold">Description</p>
 
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et dolor suscipit libero eos atque quia ipsa
-              sint voluptatibus!
-              Beatae sit assumenda asperiores iure at maxime atque repellendus maiores quia sapiente.</p>
+            <p>{{item.description}}</p>
 
-            <form class="d-flex justify-content-left">
+            <form class="d-flex justify-content-left" action="{% url 'core:add_cart' item.pk %}" method="POST">
+              {% csrf_token %}
               <!-- Default input -->
-              <input type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+              <input name='quantity' min='0' max='100' type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
               <button class="btn btn-primary btn-md my-0 p" type="submit">Add to cart
                 <i class="fas fa-shopping-cart ml-1"></i>
               </button>
 
             </form>
+            <a class="mt-5 btn btn-danger btn-md my-0 p" href="{% url 'core:remove_cart' item.pk %}">remove from cart
+              <i class="fas fa-shopping-cart ml-1"></i>
+            </a>
 
           </div>
           <!--Content-->
@@ -114,8 +122,6 @@
       </div>
       <!--Grid row-->
 
-    </div>
-  </main>
   <!--Main layout-->
 
 {% endblock %}

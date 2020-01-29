@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <!--Main layout-->
+
+
+  <div class="table-responsive text-nowrap">
+      <h2>Order Summary</h2>
+      <table class="table">
+          <thead>
+          <tr>
+              <th scope="col">#</th>
+              <th scope="col">Item title</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total Item Price</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for item in order.items.all %}
+          <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ item.item.title }}</td>
+              <td>
+                {% if item.item.discount_price %}
+                  {{ item.item.discount_price }}
+                {% else %}
+                  {{ item.item.price }}
+                {% endif %}
+              </td>
+              <td>
+                  {{ item.quantity }}
+              </td>
+              <td>
+              {{ item.total_price }}
+              </td>
+          </tr>
+          {% empty %}
+          <tr>
+              <td colspan='5'>Your cart is empty</td>
+          </tr>
+          <tr>
+              <td colspan="5">
+              <a class='btn btn-primary float-right' href="{% url 'core:home' %}">Continue shopping</a>
+              </td>
+          </tr>
+          {% endfor %}
+
+
+          {% if order.total_price %}
+            <tr>
+                <td colspan="4"><b>Order Total</b></td>
+                <td><b>${{ order.total_price }}</b></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                <a class='btn btn-warning float-right ml-2' href="{% url 'core:checkout' %}">Proceed to checkout</a>
+                <a class='btn btn-primary float-right' href="{% url 'core:home' %}">Continue shopping</a>
+                </td>
+            </tr>
+        {% endif %}
+
+          </tbody>
+      </table>
+
+      </div>
+
+
+  <!--Main layout-->
+
+{% endblock %}
