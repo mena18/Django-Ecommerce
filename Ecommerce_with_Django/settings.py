@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_countries',
     'core'
 ]
 
@@ -110,3 +111,5 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 LOGIN_REDIRECT_URL = '/'
+
+STRIPE_API_KEY = "sk_test_4eC39HqLyjWDarjtT1zdp7dc"

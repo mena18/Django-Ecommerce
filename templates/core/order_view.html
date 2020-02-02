@@ -14,6 +14,7 @@
               <th scope="col">Price</th>
               <th scope="col">Quantity</th>
               <th scope="col">Total Item Price</th>
+              <th scope="col"></th>
           </tr>
           </thead>
           <tbody>
@@ -29,18 +30,31 @@
                 {% endif %}
               </td>
               <td>
-                  {{ item.quantity }}
+                <form id='{{item.item.pk}}' action="{% url 'core:add_cart' item.item.pk %}" method="POST">
+                  {% csrf_token %}
+                  <select name="quantity" onchange="func({{item.item.pk}})">
+                    {% for i in  range %}
+                    <option {%if item.quantity == i %}selected{% endif %} value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                  </select>
+                </form>
+
               </td>
               <td>
               {{ item.total_price }}
+              </td>
+              <td >
+                <a style='color: red;' href="{% url 'core:remove_cart' item.item.pk  %}">
+                  <i class="fas fa-trash"></i>
+                </a>
               </td>
           </tr>
           {% empty %}
           <tr>
               <td colspan='5'>Your cart is empty</td>
           </tr>
-          <tr>
-              <td colspan="5">
+          <tr >
+              <td colspan="6">
               <a class='btn btn-primary float-right' href="{% url 'core:home' %}">Continue shopping</a>
               </td>
           </tr>
@@ -49,11 +63,11 @@
 
           {% if order.total_price %}
             <tr>
-                <td colspan="4"><b>Order Total</b></td>
+                <td colspan="5"><b>Order Total</b></td>
                 <td><b>${{ order.total_price }}</b></td>
             </tr>
             <tr>
-                <td colspan="5">
+                <td colspan="6">
                 <a class='btn btn-warning float-right ml-2' href="{% url 'core:checkout' %}">Proceed to checkout</a>
                 <a class='btn btn-primary float-right' href="{% url 'core:home' %}">Continue shopping</a>
                 </td>
@@ -65,7 +79,14 @@
 
       </div>
 
-
+{% block extra_scripts %}
+  <script>
+  function func(n){
+    form = document.getElementById(n);
+    form.submit();
+  }
+  </script>
+{% endblock %}
   <!--Main layout-->
 
 {% endblock %}

@@ -50,18 +50,21 @@
 
             <p>{{item.description}}</p>
 
+            {% if not selected %}
             <form class="d-flex justify-content-left" action="{% url 'core:add_cart' item.pk %}" method="POST">
               {% csrf_token %}
               <!-- Default input -->
-              <input name='quantity' min='0' max='100' type="number" value="1" aria-label="Search" class="form-control" style="width: 100px">
+              <input name='quantity' min='0' max='100' type="hidden" value="1" aria-label="Search" class="form-control" style="width: 100px">
               <button class="btn btn-primary btn-md my-0 p" type="submit">Add to cart
                 <i class="fas fa-shopping-cart ml-1"></i>
               </button>
 
             </form>
+            {% else %}
             <a class="mt-5 btn btn-danger btn-md my-0 p" href="{% url 'core:remove_cart' item.pk %}">remove from cart
               <i class="fas fa-shopping-cart ml-1"></i>
             </a>
+            {% endif %}
 
           </div>
           <!--Content-->

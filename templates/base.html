@@ -47,6 +47,8 @@
     }
 
   </style>
+  {% block extra_head %}
+  {% endblock %}
 </head>
 
 <body>
@@ -210,6 +212,8 @@
       new WOW().init();
 
     </script>
+    {% block extra_scripts %}
+    {% endblock %}
   </body>
 
   </html>
