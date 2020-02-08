@@ -81,6 +81,9 @@ class Address(models.Model):
     Zip = models.CharField(max_length=100)
     default = models.BooleanField(default=False)
 
+    def __str__(self):
+        return "{},{},{}".format(self.street_address,self.apartment_address,self.country)
+
 class Payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     amount = models.FloatField()
@@ -88,18 +91,25 @@ class Payment(models.Model):
     stripe_charge_id = models.CharField(max_length=30,null=True,blank=True)
     paypal_charge_id = models.CharField(max_length=30,null=True,blank=True)
 
+    def __str__(self):
+        return "{} : ({})".format(self.user.username,self.amount)
 
 class Cupon(models.Model):
     code = models.CharField(max_length=100)
     persent = models.IntegerField()
     num_times = models.IntegerField()
     valid = models.BooleanField(default=True)
+    Global = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.code
 
 
 class User_cupon(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     cupon = models.ForeignKey("Cupon",on_delete=models.CASCADE)
-    times_used = models.IntegerField()
+    times_used = models.IntegerField(default=0)
+
 
 
     def usable(self):

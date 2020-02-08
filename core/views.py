@@ -11,20 +11,6 @@ import stripe
 stripe.api_key = settings.STRIPE_API_KEY
 # `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
 
-
-def test_print(n):
-    print("\n\n-------------------------------------\n\n\n\n")
-    my_print(n)
-    print("\n\n-------------------------------------\n\n\n\n")
-
-def my_print(n):
-    print(n)
-
-def chechout_test(request):
-    form = CheckoutForm()
-    return render(request,"core/checkout_test.html",{'form':form});
-
-
 class Home_view(ListView):
     template_name = "core/home.html"
     model = Item
@@ -51,6 +37,9 @@ class Checkout_view(View):
 
         form = CheckoutForm()
         order = Order.objects.get(user=self.request.user, ordered=False)
+        if(order.items.count()<1):
+            messages.info(self.request,"your cart is empty")
+            return redirect("/")
         context = {'form':form,'order':order};
         if(not order.cupon):
             context['promocode_form']=True
@@ -115,7 +104,6 @@ class Payment_view(View):
 
     def post(self,*args,**kwargs):
         token = self.request.POST['stripeToken']
-        test_print(token)
         order = Order.objects.get(user=self.request.user,ordered=False)
         total = order.total_price()
 
@@ -201,12 +189,28 @@ class AddCopon(View):
             messages.warning(self.request,"Cupon not valid")
             return redirect(self.request.POST.get('back','/'))
         cupon=cupon[0]
+        user_cupon=""
+        if(cupon.Global):
+            user_cupon,created = User_cupon.objects.get_or_create(user=self.request.user,cupon=cupon)
+            print("-------------------------\n\n")
+            print(user_cupon)
+            print("\n\n-------------------------")
+        else:
+            user_cupon = User_cupon.objects.filter(user=self.request.user,cupon=cupon)
+            if(not user_cupon.exists()):
+                messages.warning(self.request,"you don't have that cupon")
+                return redirect(self.request.POST.get('back','/'))
+            user_cupon = user_cupon[0]
+            print("-------------------------\n\n")
+            print(user_cupon)
+            print("\n\n-------------------------")
 
-        user_cupon = User_cupon.objects.filter(user=self.request.user,cupon=cupon)
-        if(not user_cupon.exists()):
-            messages.warning(self.request,"you don't have that cupon")
-            return redirect(self.request.POST.get('back','/'))
-        user_cupon = user_cupon[0]
+
+        print("-------------------------\n\n")
+        print(type(user_cupon))
+        print(user_cupon)
+        print("\n\n-------------------------")
+
 
         if(not user_cupon.usable()):
             messages.warning(self.request,"you can't use that cupon any more")

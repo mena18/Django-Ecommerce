@@ -23,13 +23,13 @@
               {% csrf_token %}
               <!--address-->
               <div class="md-form mb-5">
-                <input value="st1" type="text" name="street_address" id="street_address" class="form-control" placeholder="1234 Main St">
+                <input value="" type="text" name="street_address" id="street_address" class="form-control" placeholder="1234 Main St">
                 <label for="street_address" class="">Street address</label>
               </div>
 
               <!--address-2-->
               <div class="md-form mb-5">
-                <input value="st2" type="text" name="apartment_address" id="apartment_address" class="form-control" placeholder="Apartment or suite">
+                <input value="" type="text" name="apartment_address" id="apartment_address" class="form-control" placeholder="Apartment or suite">
                 <label for="apartment_address" class="">Apartment address</label>
               </div>
 
@@ -51,7 +51,7 @@
                 <div class="col-lg-4 col-md-6 mb-4">
 
                   <label for="zip">Zip</label>
-                  <input value="123" name="zip" type="text" class="form-control" id="zip" placeholder="" >
+                  <input value="" name="zip" type="text" class="form-control" id="zip" placeholder="" >
 
                 </div>
                 <!--Grid column-->
@@ -62,7 +62,7 @@
               <hr>
 
               <div class="custom-control custom-checkbox">
-                <input checked name="same_billing_address" type="checkbox" class="custom-control-input" id="same-address">
+                <input  name="same_billing_address" type="checkbox" class="custom-control-input" id="same-address">
                 <label class="custom-control-label" for="same-address">Shipping address is the same as my billing address</label>
               </div>
               <div class="custom-control custom-checkbox">
@@ -74,7 +74,7 @@
 
               <div class="d-block my-3">
                 <div class="custom-control custom-radio">
-                  <input checked value="S" id="debit" name="payment_option" type="radio" class="custom-control-input">
+                  <input  value="S" id="debit" name="payment_option" type="radio" class="custom-control-input">
                   <label class="custom-control-label" for="debit">Stripe</label>
                 </div>
                 <div class="custom-control custom-radio">

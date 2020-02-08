@@ -9,13 +9,56 @@
 
 <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in</a>.{% endblocktrans %}</p>
 
+
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
 <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
   {% csrf_token %}
-  {{ form.as_p }}
+  <div class="form-group">
+    <label for="id_username" class="active">Username:</label>
+    <input class="form-control" type="text" name="username" placeholder="Username" autofocus="autofocus" minlength="1" maxlength="150" required="" id="id_username">
+
+  </div>
+  <div class="form-group">
+    <label for="id_email" class="active">E-mail (optional):</label>
+    <input class="form-control" type="email" name="email" placeholder="E-mail address" id="id_email">
+
+  </div>
+  <div class="form-group">
+    <label for="id_password1" class="active">Password:</label>
+    <input class="form-control" type="password" name="password1" placeholder="Password" required="" id="id_password1">
+
+  </div>
+  <div class="form-group">
+    <label for="id_password2" class="active">Password (again):</label>
+    <input class="form-control" type="password" name="password2" placeholder="Password (again)" required="" id="id_password2">
+
+  </div>
+  <div class="form-group" style="text-align:center">
+    <button type="submit" class="btn btn-success">Sign Up »</button>
+  </div>
+
   {% if redirect_field_value %}
   <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
   {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
 </form>
 
 {% endblock %}
