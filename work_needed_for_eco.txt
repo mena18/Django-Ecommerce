@@ -1,0 +1,25 @@
+- i don't need to work a lot on it or to add a lot of features but i must fix all bugs first so my next steps are :-
+
+
+
+
+
+- registration problem
+- login problem
+- make login_required pages instead of giving that error
+
+
+- write project tests
+
+- fix problem of the footer 
+
+
+- checkout error address must exists
+- add new items to make it look real
+- fix search
+- get releated items in the one page
+
+- continue tests
+
+- document the project
+

@@ -5,9 +5,11 @@ media
 .DS_Store
 *.sqlite3
 *.env
+python_modules/
 
 # Accept these files in the repository
 !.gitignore
 !.travis.yml
 /.env
 /.vscode
+
