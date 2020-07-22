@@ -28,28 +28,29 @@
 
           <!-- Links -->
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">All
-                <span class="sr-only">(current)</span>
+            <li class="nav-item {% if current_cat == 'all' %}active{% endif %}">
+              <a class="nav-link" href="/">All
+                
               </a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Shirts</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Sport wears</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Outwears</a>
-            </li>
+            
+            {% for cat in categories %}
+              <li class="nav-item {% if current_cat == cat.0 %}active{% endif %} ">
+                <a class="nav-link" href="?cat={{cat.0}}">{{cat.1}}
+                  
+                 
+                </a>
+              </li>
+            {% endfor %}
 
           </ul>
           <!-- Links -->
 
-          <form class="form-inline">
+          <form class="form-inline" method="GET" action="/">
             <div class="md-form my-0">
-              <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+              <input name='search' class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
             </div>
+            <!-- <input type="submit" value="search"> -->
           </form>
         </div>
         <!-- Collapsible content -->

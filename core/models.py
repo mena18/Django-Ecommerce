@@ -22,6 +22,7 @@ class Item(models.Model):
     category = models.CharField(choices=Category_CHOICE,max_length=2)
     label = models.CharField(choices=Label_CHOICE,max_length=1)
     description = models.CharField(max_length=400)
+    extra_info = models.TextField(True,null=True)
     image = models.ImageField(upload_to="images")
 
     def __str__(self):

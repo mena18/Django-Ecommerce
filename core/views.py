@@ -5,29 +5,47 @@ from django.contrib import messages
 from django.utils import timezone
 from .forms import *
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
+
 
 import stripe
 stripe.api_key = settings.STRIPE_API_KEY
 # `source` is obtained with Stripe.js; see https://stripe.com/docs/payments/accept-a-payment-charges#web-create-token
 
-class Home_view(ListView):
-    template_name = "core/home.html"
-    model = Item
-    context_object_name = 'items'
+class Home_view(View):
+    def get(self,*args,**kwargs): 
+        
+        category = self.request.GET.get('cat','all')
+        search_res = self.request.GET.get('search')
+
+        if(category!='all'):
+            items = Item.objects.filter(category=category)
+
+        elif(search_res):
+            items = Item.objects.filter(title__icontains=search_res)
+        else:
+            items = Item.objects.all()
+
+        categories = Category_CHOICE
+        context={'items':items,"categories":categories,"current_cat":category}
+        return render(self.request,"core/home.html",context)
+
 
 class Product_view(View):
-
     def get(self,*args,**kwargs):
         item = get_object_or_404(Item,pk=kwargs['pk'])
         context={'item':item}
-        order_item = OrderItem.objects.filter(user=self.request.user,ordered=False,item=item)
-        if(order_item.exists()):
-            context['selected']=True
+        if self.request.user.is_authenticated:
+            order_item = OrderItem.objects.filter(user=self.request.user,ordered=False,item=item)
+            if(order_item.exists()):
+                context['selected']=True
         return render(self.request,"core/product.html",context)
 
-class Checkout_view(View):
 
+
+class Checkout_view(LoginRequiredMixin,View):
     def empty(self,lis):
         for i in lis:
             if(i==''):return 1;
@@ -85,11 +103,11 @@ class Checkout_view(View):
             userprofile.address=address
             userprofile.save()
 
-        messages.info(self.request,'recieved')
+
         return redirect("core:payment");
 
 
-class Payment_view(View):
+class Payment_view(LoginRequiredMixin,View):
     #payment
     def get(self,*args,**kwargs):
 
@@ -179,7 +197,7 @@ class Payment_view(View):
 
 
 
-class AddCopon(View):
+class AddCopon(LoginRequiredMixin,View):
     def post(self,*args,**kwargs):
         code = self.request.POST['code']
         cupon = Cupon.objects.filter(code=code,valid=True)
@@ -235,8 +253,9 @@ class AddCopon(View):
 # because i don't want to add user and order in orderitem
 
 
-class Cart_controller:
+class Cart_controller():
 
+    @login_required
     def show(request):
         order =  Order.objects.filter(user=request.user, ordered=False)
         if(order.exists()):
@@ -244,8 +263,8 @@ class Cart_controller:
         else:
             messages.error(request,"you don't have cart")
             return redirect("core:home");
-
-
+    
+    @login_required
     def add_to_cart(request,pk):
         item = get_object_or_404(Item,pk=pk)
         quantity = int(request.POST['quantity']);
@@ -276,7 +295,7 @@ class Cart_controller:
             messages.success(request, "Item is added successfuly")
             return redirect("core:product",pk=pk)
 
-
+    @login_required
     def remove_from_cart(request,pk):
         item = get_object_or_404(Item,pk=pk)
 

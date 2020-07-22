@@ -69,6 +69,8 @@ DATABASES = {
     }
 }
 
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
 if ENVIRONMENT == 'production':
     DEBUG = False
     SECRET_KEY = os.getenv('SECRET_KEY')
