@@ -10,9 +10,9 @@ Category_CHOICE = (
 )
 
 Label_CHOICE = (
-    ('p','primary'),
-    ('s','secondy'),
-    ('d','danger'),
+    ('e','No Label'),
+    ('p','new'),
+    ('d','best seller'),
 )
 
 class Item(models.Model):

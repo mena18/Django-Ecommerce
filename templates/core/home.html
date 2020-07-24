@@ -1,7 +1,18 @@
 {% extends 'base.html' %}
 {% load error_tags %}
 {% block content %}
-  <!--Carousel Wrapper-->
+
+
+
+<style>
+
+  .card-img-top{
+    width:200px;
+    height: 200px;
+  }
+</style>
+
+<!--Carousel Wrapper-->
 
 
   <!--/.Carousel Wrapper-->
@@ -91,7 +102,11 @@
                 <h5>
                   <strong>
                     <a href="{% url 'core:product' item.pk %}" class="dark-grey-text">{{item.title}}
-                      <span class="badge badge-pill {{item.get_label_display}}-color">NEW</span>
+                      {% if item.label == 'p' %}
+                      <span class="badge badge-pill primary-color">{{item.get_label_display}}</span>
+                      {% elif item.label == 'd' %}
+                      <span class="badge badge-pill danger-color">{{item.get_label_display}}</span>
+                      {% endif %}
                     </a>
                   </strong>
                 </h5>
