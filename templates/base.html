@@ -46,12 +46,30 @@
       }
     }
 
+
+
+    /* trying to adjust the footer to be in the bottom but failed *
+    
+    /
+    /* .body{
+      display:flex !important; 
+      flex-direction:column !important; 
+    }
+
+    .footer{
+      margin-top:auto !important;
+    } */
+
+
+
+
+
   </style>
   {% block extra_head %}
   {% endblock %}
 </head>
 
-<body>
+<body class="body">
 
   <!-- Navbar -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
@@ -136,7 +154,7 @@
   </div>
 </main>
     <!--Footer-->
-    <footer class="page-footer text-center font-small mt-4 wow fadeIn">
+    <footer class="page-footer text-center font-small mt-4 wow fadeIn footer">
 
       <!--Call to action-->
 
