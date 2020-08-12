@@ -8,7 +8,14 @@ from django.template.response import TemplateResponse
 class adminOrder(admin.ModelAdmin):
     list_display = ['user','total_price','ordered']
 
-admin.site.register(Item)
+
+@admin.register(Item)
+class admin_item(admin.ModelAdmin):
+    list_display = ('title','price','discount_price','category')
+    list_filter = ('title','category')
+    search_fields = ('title','category')
+
+# admin.site.register(Item)
 admin.site.register(Order,adminOrder)
 admin.site.register(OrderItem)
 admin.site.register(Cupon)
